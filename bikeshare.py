@@ -4,8 +4,8 @@
 # In[ ]:
 
 
-## Bikeshare data analytics project
-## By Ben Waldron 2021
+## Bikeshare data analytics project for Udacity programming for data science in Pthon.
+## By Ben Waldron November 2021
 
 
 import time
@@ -21,20 +21,20 @@ CITY_DATA = { 'chicago': 'chicago.csv',
 def get_user_input(request_string, acceptable_answers):
     '''
     Returns (str) keyboard response to question posed in request_string, in lowercase
-    
+
     Args    (str)  request_string      - message to display requesting input
             (list) acceptable_answers  - accepable answers  (lower case)
-     
-        
-        '''
+
+
+    '''
     user_input = ''
-    
+
     #format complex string for display
     input_request = request_string+'\nOptions: '+str(acceptable_answers).strip('[]')+'\n:'
-    
+
     while user_input not in acceptable_answers:
         user_input = input(input_request).lower()
-      
+
     return user_input
 
 
@@ -48,26 +48,26 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    
+
     months_options = ['all','january','february','march','april','may','june','july','august','september','october','november','december']
     days_options = ['all','monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-    
+
     print('Hello! Let\'s explore some US bikeshare data!')
-    
+
     #capture keyboard input.  list of options are the keys of the CITY_DATA dictionary
     city = get_user_input('\nEnter name of city to analyse: ', list(CITY_DATA.keys()))
-    
-    
-    # get user input for month (all, january, february, ... , december)   
-    month = get_user_input('\nWhich month would you like to ananlyse the {} data for (or all) : '.format(city.title()), months_options)        
-    
-    
+
+
+    # get user input for month (all, january, february, ... , december)
+    month = get_user_input('\nWhich month would you like to ananlyse the {} data for (or all) : '.format(city.title()), months_options)
+
+
     # get user input for day of week (all, monday, tuesday, ... sunday)
-    day = get_user_input('\nWhich day of the week (or all) would you like to analyse: ',days_options)   
-    
+    day = get_user_input('\nWhich day of the week (or all) would you like to analyse: ',days_options)
+
     print('+'*40,'\nThank you -----> Fetching Bikeshare data for ',city.title())
     print('-'*40)
-    
+
     return city, month, day
 
 
@@ -115,29 +115,29 @@ def load_data(city, month, day):
 def time_stats(df):
     """
     Displays statistics on the most frequent times of travel.
-    
+
     Args (dataframe)  df  - filtered bikeshare dataset
     Output - print to screen time summary statistics
     """
     months = ['January', 'February', 'March', 'April', 'May', 'June','July','August','September','October',
                   'November','December']
-    
+
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
-    
-    
+
+
     # display the most common month
     most_common_month = (df['start_time_month'].mode())[0]
-    
+
 
     # display the most common day of week
     most_common_day = (df['start_time_day_of_week'].mode())[0]
-   
+
     # display the most common start hour
     df['start_hour'] = pd.DatetimeIndex(df['Start Time']).hour
     most_common_start_hour = (df['start_hour']).mode()[0]
 
-    
+
     print('The most common month for travel is: {}.\nThe most common day of the week to travel is: {}. \nThe most common hour of travel is: {}:00 hrs.'.format(months[most_common_month-1], most_common_day, most_common_start_hour))
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -157,7 +157,7 @@ def station_stats(df):
 
     # display most frequent combination of start station and end station trip
     df['Station Combination'] = df['Start Station']+' to '+df['End Station']
-    most_common_station_combination = (df['Station Combination']).mode()[0]                                                       
+    most_common_station_combination = (df['Station Combination']).mode()[0]
 
     print("The most common starting station is: {}.\nThe most common end station is: {}.\nThe most common trip is: {}.".format(most_common_start_station,most_common_end_station,most_common_station_combination))
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -177,7 +177,7 @@ def trip_duration_stats(df):
     # display mean travel time
     mean_travel_time_seconds = df['Trip Duration'].mean()
     mean_travel_time = str(timedelta(seconds=round(mean_travel_time_seconds)))
-    
+
     print('The total travel time in selected period is (in seconds): ',total_trip_duration_in_seconds)
     print('The average travel time per trip is (in seconds): {:.2f}'.format(mean_travel_time_seconds))
     print('\nThe total travel time in selected period is (Days, Hours:Min:Sec): {}\nThe average travel time per trip is (Hours:Min:Sec): {}.'.format(total_trip_duration,mean_travel_time))
@@ -194,13 +194,13 @@ def user_stats(df):
     # Display counts of user types
     user_type_counts = df['User Type'].value_counts()
 
-    # Display counts of gender. 
+    # Display counts of gender.
     #If no applicable data in dataset, display error message
     try:
         gender_counts = df['Gender'].value_counts()
         print('Breakdown of trip count by User Type:\n',user_type_counts.to_string())
-    
-    except:     
+
+    except:
         print('\nSorry. No gender data in dataset.\n')
 
     # Display earliest, most recent, and most common year of birth
@@ -211,31 +211,31 @@ def user_stats(df):
         most_common_birthyear = round(df['Birth Year'].mode()[0])
         print('\nBreakdown of trip count by Gender:\n',gender_counts.to_string())
         print('\nEarliest birth year is: {}.\nLatest birth year is: {}.\nMost common birth year is: {}.'.format(earliest_birthyear,latest_birthyear,most_common_birthyear))
-    
+
     # If no applicable data in dataset, display error message
     except:
         print('\nSorry.  No Birth year data in dataset.\n')
 
-    
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
 def display_raw_data(df):
     '''Displays raw data in 5 line increments
     Arg (DataFrame) - Data Frame to display
-    
+
     Output is raw data to console in 5 line increments until user enters "no" or end of data
     '''
-    print('\nDisplaying Raw Data\n')   
-    
+    print('\nDisplaying Raw Data\n')
+
     user_input = get_user_input('Would you like to display 5 lines of raw data?', ['yes','no'])
     row_index = 0
-          
-    # display raw data, removing the columns which were added to original data using .drop() 
+
+    # display raw data, removing the columns which were added to original data using .drop()
     while user_input != 'no':
-        
+
     # check that there are enough rows left to display 5 more, then display them
-        if (row_index+5) <= df.shape[0]:     
+        if (row_index+5) <= df.shape[0]:
             print(df.drop(['start_time_month','start_time_day_of_week','Station Combination','start_hour'], axis=1).iloc[row_index:(row_index+5),:])
             row_index += 5
             user_input = get_user_input('\nWould you like to display another 5 lines?', ['yes','no'])
@@ -244,17 +244,17 @@ def display_raw_data(df):
             print(df.drop(['start_time_month','start_time_day_of_week','Station Combination','start_hour'], axis=1).iloc[row_index:,:])
             print('\nThere are no more lines of data to display')
             user_input = 'no'  #force drop out of the while loop
-        
-   
+
+
     print('\nThankyou\n')
     print('-'*40)
 
-    
+
 def main():
     while True:
         city, month, day = get_filters()
         df = load_data(city, month, day)
-        
+
         #if df is empty (likley because month or day is not in dataset, dont attempt analysis)
         if df.shape[0] >= 1:
             time_stats(df)
@@ -264,7 +264,7 @@ def main():
             display_raw_data(df)
         else:
             print('Sorry. There is no data for {} for {}, for {} (days)'.format(city,month,day).title())
-                       
+
         restart = get_user_input('\nWould you like to start again ?',['yes','no'])
         if restart.lower() != 'yes':
             break
@@ -276,7 +276,3 @@ if __name__ == "__main__":
 
 
 # In[ ]:
-
-
-
-
